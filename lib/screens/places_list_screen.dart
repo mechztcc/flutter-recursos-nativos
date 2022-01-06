@@ -9,36 +9,41 @@ class PlacesListScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Meus Lugares'),
-        actions: [
-          IconButton(
-            icon: Icon(Icons.add),
-            onPressed: () {
-              Navigator.of(context).pushNamed(AppRoutes.PLACE_FORM);
-            },
-          )
-        ],
-      ),
-      body: Consumer<GreatPlaces>(
-        builder: (ctx, greatPlaces, ch) => greatPlaces.itemsCount == 0
-            ? ch!
-            : ListView.builder(
-                itemCount: greatPlaces.itemsCount,
-                itemBuilder: (ctx, i) => ListTile(
-                  leading: CircleAvatar(
-                    backgroundImage: FileImage(
-                      greatPlaces.getItemByIndex(i).image,
-                    ),
-                  ),
-                  title: Text(greatPlaces.getItemByIndex(i).title),
-                  onTap: () {},
-                ),
-              ),
-        child: const Center(
-          child: Text('Nenhum local encontrado'),
+        appBar: AppBar(
+          title: Text('Meus Lugares'),
+          actions: [
+            IconButton(
+              icon: Icon(Icons.add),
+              onPressed: () {
+                Navigator.of(context).pushNamed(AppRoutes.PLACE_FORM);
+              },
+            )
+          ],
         ),
-      ),
-    );
+        body: FutureBuilder(
+          future: Provider.of<GreatPlaces>(context, listen: false).loadPlaces(),
+          builder: (context, snapshot) => snapshot.connectionState ==
+                  ConnectionState.waiting
+              ? Center(child: CircularProgressIndicator())
+              : Consumer<GreatPlaces>(
+                  builder: (ctx, greatPlaces, ch) => greatPlaces.itemsCount == 0
+                      ? ch!
+                      : ListView.builder(
+                          itemCount: greatPlaces.itemsCount,
+                          itemBuilder: (ctx, i) => ListTile(
+                            leading: CircleAvatar(
+                              backgroundImage: FileImage(
+                                greatPlaces.getItemByIndex(i).image,
+                              ),
+                            ),
+                            title: Text(greatPlaces.getItemByIndex(i).title),
+                            onTap: () {},
+                          ),
+                        ),
+                  child: const Center(
+                    child: Text('Nenhum local encontrado'),
+                  ),
+                ),
+        ));
   }
 }
