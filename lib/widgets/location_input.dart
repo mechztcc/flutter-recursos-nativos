@@ -15,6 +15,7 @@ class _LocationInputState extends State<LocationInput> {
     return Column(
       children: [
         Container(
+          alignment: Alignment.center,
           height: 170,
           width: double.infinity,
           decoration: BoxDecoration(
@@ -28,7 +29,7 @@ class _LocationInputState extends State<LocationInput> {
                 ),
         ),
         Row(
-          mainAxisAlignment: MainAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             ElevatedButton.icon(
               icon: Icon(Icons.location_on),
